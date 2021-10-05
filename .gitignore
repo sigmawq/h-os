@@ -1,0 +1,9 @@
+
+*.sh.swn
+*.sh.swp
+*.sh.swo
+*.sh.swm
+*.swp
+*.o
+*.bin
+*.iso

@@ -1,0 +1,29 @@
+GCC_CROSS_COMPILER_PATH="/home/swql/opt/cross/bin/"
+echo Using cross compiler path $GCC_CROSS_COMPILER_PATH
+echo Building boot.s...
+if ! $GCC_CROSS_COMPILER_PATH/i686-elf-as boot.s -o boot.s -o boot.o; then echo "Some error"
+fi
+
+echo Building kernel.c...
+if ! $GCC_CROSS_COMPILER_PATH/i686-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -Oi -Wall -Wextra; then echo "Some Error"
+fi
+
+echo building linker.ld...
+if ! $GCC_CROSS_COMPILER_PATH/i686-elf-gcc -T linker.ld -o h-os.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc; then echo "Some Error"
+fi
+	
+echo Building  h-os.bin...
+if grub-file --is-x86-multiboot myos.bin; then
+  echo multiboot confirmed
+else
+  echo the file is not multiboot
+  exit
+fi
+
+echo building image...
+cp h-os.bin isodir/boot/h-os.bin
+cp grub.cfg isodir/boot/grub/grub.cfg
+exec grub-mkrescue -o h-os.iso isodir &
+wait $!
+
+echo Done!
