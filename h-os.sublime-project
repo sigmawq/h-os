@@ -1,0 +1,16 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+	"build_systems":
+	[
+		{
+			"shell": true,
+			"name": "Build H-OS",
+			"cmd" : ["src/build.sh"]	
+		}
+	]
+}
